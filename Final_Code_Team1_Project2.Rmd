@@ -275,6 +275,23 @@ r <- cor(df, use="complete.obs")
 xkabledply(round(r,2))
 ggcorrplot(r, hc.order = TRUE, type = "lower", lab = TRUE)
 ```
-## Feature selection comparing methods: exhaustive, forward.
+## Feature selection comparing methods: exhaustive, forward
+
+### Part1: Exhaustive
+```{r, results = 'markup'}
+
+loadPkg("leaps")
+loadPkg("car")
+reg.best10 <- regsubsets(selling_price~. -name , data = vehicle, nvmax = 10, nbest = 1, method = "exhaustive")
+summary(reg.best10)
+plot(reg.best10, scale = "adjr2", main = "Adjusted R^2")
+plot(reg.best10, scale = "bic", main = "BIC")
+plot(reg.best10, scale = "Cp", main = "Cp")
+
+cat("considering we have to maximize R2, minimize BIC and CP, and minimize the number of variables to reduce model complexity, the following model seems the best. \n")
+
+best_model = lm(selling_price~ year+ km_driven+ seller_type+ transmission+ mileage+ max_power, data = vehicle)
+summary(best_model)
+```
 
 
