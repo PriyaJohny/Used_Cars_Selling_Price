@@ -125,7 +125,7 @@ xkablevif = function(model, title="VIFs of the model", digits = 3, pos="left", b
 # R-Project2 - Used Cars Selling Price
 
 ```{r, results = 'markup'}
-#reading the car dataset
+# reading the car dataset
 vehicle <- read.csv("Car details v3.csv")
 x <- capture.output(dput(names(vehicle)))
 cat("The vehicle dataset consists of", nrow(vehicle), "observations with", ncol(vehicle), "variables. The variables are \n", x, "\n \n")
@@ -139,9 +139,25 @@ vehicle$mileage <- gsub("kmpl","", as.character(vehicle$mileage))
 vehicle$mileage <- gsub("km/kg","", as.character(vehicle$mileage))
 vehicle$engine <- gsub("CC","", as.character(vehicle$engine))
 vehicle$max_power <- gsub("bhp","", as.character(vehicle$max_power))
+
 vehicle$torque <- sub("N.*", "", vehicle$torque)
 vehicle$torque <- sub("k.*", "", vehicle$torque)
 vehicle$torque <- sub("n.*", "", vehicle$torque)
 vehicle$torque <- sub("@.*", "", vehicle$torque)
 vehicle$torque <- sub("K.*", "", vehicle$torque)
+
+# converting the following variables to factor
+vehicle[c("fuel","transmission", "seller_type")] <- sapply(vehicle[c("fuel","transmission", "seller_type")],as.factor)
+
+# Assigning labels to owner_type
+vehicle$owner <- factor(vehicle$owner, labels = c(0,1,2,3,4), levels = c("Test Drive Car", "First Owner", "Second Owner", "Third Owner", "Fourth & Above Owner"))
+
+# converting the following variables to numeric
+vehicle[c("mileage","engine", "max_power", "torque", "owner")] <- sapply(vehicle[c("mileage","engine", "max_power", "torque", "owner")],as.numeric)
+
+# omitting na values
+vehicle <- na.omit(vehicle)
+cat("After cleaning the dataset, we have", nrow(vehicle), "observations.")
+```
+
 
