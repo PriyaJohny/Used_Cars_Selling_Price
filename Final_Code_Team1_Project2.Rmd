@@ -302,5 +302,27 @@ plot(reg.forward10, scale = "Cp", main = "Cp")
 
 cat("considering we have to minimize the number of features keeping R2 maximum and BIC and CP minimum, we see we have the same model as we obtained using exhaustive method. \n")
 ```
+## Linear regression model
+```{r, results = 'markup'}
+library(tidyverse)
+library(caret)
+
+set.seed(1000)
+vehicle_sample <- sample(2, nrow(vehicle), replace=TRUE, prob=c(0.75, 0.25))
+train <- vehicle[vehicle_sample==1, 2:13]
+test <- vehicle[vehicle_sample==2, 2:13]
+
+model <- lm(selling_price ~year+ km_driven+ seller_type+ transmission+ mileage+ max_power , data = train)
+summary(model)
+
+cat("The r-squared value of this model is", summary(model)$r.squared, ". \n")
+
+rsq <- function(x, y) summary(lm(y~x))$r.squared
+test$pred <- predict(model, test, type = "response")
+cat("The r-squared value after applying the linear regression model on the test set is", rsq(test$selling_price, test$pred), ". \n")
+
+cat("As we can see, both values are almost the same, around 0.67, which is expected. Also, a value of 0.67 means that our model explains 67% variation in the y-variable.")
+
+```
 
 
