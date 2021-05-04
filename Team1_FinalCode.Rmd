@@ -161,7 +161,7 @@ vehicle <- na.omit(vehicle)
 
 cat("After cleaning the dataset, we have", nrow(vehicle), "observations.")
 ```
-## SMART Question 1: Variation of Selling Price with respect to Different Variables
+## SMART Question 1: Variation of Selling Price With Respect to Different Variables
 
 ### Part1: Categorical Variables
 ```{r, results = 'markup'}
