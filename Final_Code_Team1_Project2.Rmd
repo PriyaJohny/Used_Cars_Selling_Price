@@ -376,3 +376,6 @@ The maximum value of R2 that can be attained using linear models is around 0.68.
 ```
 
 
+## References
+
+Vehicle dataset: Used Cars data from websites. (2020). Car details v3.[Data file]. Retrieved from https://www.kaggle.com/nehalbirla/vehicle-dataset-from-cardekho
