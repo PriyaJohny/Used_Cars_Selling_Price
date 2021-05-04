@@ -207,7 +207,7 @@ p6
 cat("From this graph, we can see that the selling price depends on the number of seats, increasing till 7 for an SUV and decreasing after that. \n")
 
 ```
-``{r, results = 'markup'}
+```{r, results = 'markup'}
 ggplot(vehicle, aes(x=km_driven, y=selling_price)) + geom_point()
 cat("We can see that the graph is exponential, as km_driven increases, the selling_price decreases which is expected. So to calculate the mathematical relation between these variables, we plotted them after taking log of both because we will have a linear model. \n")
 
