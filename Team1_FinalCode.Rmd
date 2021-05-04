@@ -162,6 +162,49 @@ cat("After cleaning the dataset, we have", nrow(vehicle), "observations.")
 ## SMART Question 1: Variation of Selling Price with respect to Different Variables
 
 ### Part1: Categorical Variables
+```{r, results = 'markup'}
+loadPkg("leaps")
+loadPkg("car")
+
+reg.best10 <- regsubsets(selling_price~. -name , data = vehicle, nvmax = 10, nbest = 1, method = "exhaustive")
+
+summary(reg.best10)
+
+plot(reg.best10, scale = "adjr2", main = "Adjusted R^2")
+plot(reg.best10, scale = "bic", main = "BIC")
+plot(reg.best10, scale = "Cp", main = "Cp")
+
+cat("considering we have to maximize R2, minimize BIC and CP, and minimize the number of variables to reduce model complexity, the following model seems the best. \n")
+
+best_model = lm(selling_price~ year+ km_driven+ seller_type+ transmission+ mileage+ max_power, data = vehicle)
+
+summary(best_model)
+```
 
 ### Part2: Numerical Variables
+```{r, results = 'markup'}
+data_p4 <- vehicle %>%
+      	group_by(year) %>%
+      	summarise(mean_sellingPrice = mean(selling_price))
+p4 <- ggplot(data=data_p4, aes(x=year, y=mean_sellingPrice, group=1)) + geom_line()+ geom_point()+ scale_x_continuous(breaks = seq(1993, 2021, 2))
+p4
 
+cat("From this graph, we can see that the selling price greatly depends on the year of the model. It is higher for a more recent car than an older one. This observation is expected. \n")
+
+data_p5 <- vehicle %>%
+      	group_by(owner) %>%
+	      summarise(mean_sellingPrice = mean(selling_price))
+p5 <- ggplot(data=data_p5, aes(x=owner, y=mean_sellingPrice, group=1)) + geom_line()+ geom_point()
+p5
+
+cat("From this graph, we can see that the selling price greatly depends on the number of previous owners. The lesser the number of previous owner, more is the price which is expected. \n")
+
+data_p6 <- vehicle %>%
+	     group_by(seats) %>%
+       summarise(mean_sellingPrice = mean(selling_price))
+p6 <- ggplot(data=data_p6, aes(x=seats, y=mean_sellingPrice, group=1)) + geom_line()+ geom_point()+ scale_x_continuous(breaks = seq(0, 14, 2))
+p6
+
+cat("From this graph, we can see that the selling price depends on the number of seats, increasing till 7 for an SUV and decreasing after that. \n")
+
+```
