@@ -132,10 +132,10 @@ x <- capture.output(dput(names(vehicle)))
 cat("The vehicle dataset consists of", nrow(vehicle), "observations with", ncol(vehicle), "variables. The variables are \n", x, "\n \n")
 cat("Some variables are identified as categorical: Fuel, transmission and seller_type, and others are numerical. But the numerical variables consist of string suffixes (units) in their values. Also, some were blanks. So the data needed to be cleaned. \n")
 
-# removing the rows with blanks and unwanted values
+# Removing the rows with blanks and unwanted values
 vehicle <- vehicle[!((vehicle$mileage=="") | (vehicle$max_power==" bhp") |(vehicle$mileage == "0.0 kmpl")), ]
 
-# removing suffixes from the following columns
+# Removing suffixes from the following columns
 vehicle$mileage <- gsub("kmpl","", as.character(vehicle$mileage))
 vehicle$mileage <- gsub("km/kg","", as.character(vehicle$mileage))
 vehicle$engine <- gsub("CC","", as.character(vehicle$engine))
@@ -147,16 +147,16 @@ vehicle$torque <- sub("n.*", "", vehicle$torque)
 vehicle$torque <- sub("@.*", "", vehicle$torque)
 vehicle$torque <- sub("K.*", "", vehicle$torque)
 
-# converting the following variables to factor
+# Converting the following variables to factor
 vehicle[c("fuel","transmission", "seller_type")] <- sapply(vehicle[c("fuel","transmission", "seller_type")],as.factor)
 
 # Assigning labels to owner_type
 vehicle$owner <- factor(vehicle$owner, labels = c(0,1,2,3,4), levels = c("Test Drive Car", "First Owner", "Second Owner", "Third Owner", "Fourth & Above Owner"))
 
-# converting the following variables to numeric
+# Converting the following variables to numeric
 vehicle[c("mileage","engine", "max_power", "torque", "owner")] <- sapply(vehicle[c("mileage","engine", "max_power", "torque", "owner")],as.numeric)
 
-# omitting na values
+# Omitting na values
 vehicle <- na.omit(vehicle)
 
 cat("After cleaning the dataset, we have", nrow(vehicle), "observations.")
