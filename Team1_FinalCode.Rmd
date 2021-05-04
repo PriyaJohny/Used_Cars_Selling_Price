@@ -159,5 +159,9 @@ vehicle[c("mileage","engine", "max_power", "torque", "owner")] <- sapply(vehicle
 vehicle <- na.omit(vehicle)
 cat("After cleaning the dataset, we have", nrow(vehicle), "observations.")
 ```
+## SMART Question 1: Variation of Selling Price with respect to Different Variables
 
+### Part1: Categorical Variables
+
+### Part2: Numerical Variables
 
