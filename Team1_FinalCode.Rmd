@@ -234,3 +234,5 @@ summary(model)
 cat("We can conclude that all except fuel type and owner are highly significant variables. \n")
 ```
 
+## SMART Question 2: Type of car that has been sold the most (in each category) and the preferred category in each variable
+
