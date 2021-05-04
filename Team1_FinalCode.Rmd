@@ -122,4 +122,26 @@ xkablevif = function(model, title="VIFs of the model", digits = 3, pos="left", b
   xkabledply( vifs, title=title, digits = digits, pos=pos, bso=bso )
 }
 ```
+# R-Project2 - Used Cars Selling Price
+
+```{r, results = 'markup'}
+#reading the car dataset
+vehicle <- read.csv("Car details v3.csv")
+x <- capture.output(dput(names(vehicle)))
+cat("The vehicle dataset consists of", nrow(vehicle), "observations with", ncol(vehicle), "variables. The variables are \n", x, "\n \n")
+cat("Some variables are identified as categorical: Fuel, transmission and seller_type, and others are numerical. But the numerical variables consist of string suffixes (units) in their values. Also, some were blanks. So the data needed to be cleaned. \n")
+
+# removing the rows with blanks and unwanted values
+vehicle <- vehicle[!((vehicle$mileage=="") | (vehicle$max_power==" bhp") |(vehicle$mileage == "0.0 kmpl")), ]
+
+# removing suffixes from the following columns
+vehicle$mileage <- gsub("kmpl","", as.character(vehicle$mileage))
+vehicle$mileage <- gsub("km/kg","", as.character(vehicle$mileage))
+vehicle$engine <- gsub("CC","", as.character(vehicle$engine))
+vehicle$max_power <- gsub("bhp","", as.character(vehicle$max_power))
+vehicle$torque <- sub("N.*", "", vehicle$torque)
+vehicle$torque <- sub("k.*", "", vehicle$torque)
+vehicle$torque <- sub("n.*", "", vehicle$torque)
+vehicle$torque <- sub("@.*", "", vehicle$torque)
+vehicle$torque <- sub("K.*", "", vehicle$torque)
 
