@@ -324,5 +324,55 @@ cat("The r-squared value after applying the linear regression model on the test 
 cat("As we can see, both values are almost the same, around 0.67, which is expected. Also, a value of 0.67 means that our model explains 67% variation in the y-variable.")
 
 ```
+## PCA-PCR
+```{r,results='markup'}
+nnd <-  subset(vehicle , select = -c(name,fuel,seller_type,transmission) ) 
+str(nnd)
+df = data.frame(scale(nnd))
+pca.out =prcomp(df , center = TRUE,scale =TRUE) # center=TRUE is the default
+summary(pca.out)
+xkabledply(pca.out$rotation)
+cat("
+PCR - 
+As you can see, two main results are printed, namely the validation error and the cumulative percentage of variance explained using n components.
+The cross validation results are computed for each number of components used so that we can easily check the score with a particular number of components without trying each combination on own.
+What we would like to see is a low cross validation error with a lower number of components than the number of variables in dataset. If this is not the case or if the smalles cross validation error occurs with a number of components close to the number of variables in the original data, then no dimensionality reduction occurs. 
+it looks like 4 components are enough to explain more than 80% of the variability in the data although the CV score is a little higher than with 8 components. Finally, note that 8 components explain all the variability as expected.")
+```
+
+
+``` {r,results= 'markup'}
+loadPkg("pls")
+#Again we want to scale our data and "CV" stands for cross validation, which is defaulted to RMSE
+pcr.fit=pcr(selling_price~.,data= df,scale=TRUE,validation ="CV")
+summary(pcr.fit)
+cat("By default, the pcr function computes the root mean squared error and the validationplot function plots this statistic, however you can choose to plot the usual mean squared error or the R2 by setting the val.type argument equal to “MSEP” or “R2” respectively")
+```
+
+
+```{r, results='markup'}
+# Plot the root mean squared error
+validationplot(pcr.fit)
+```
+
+```{r,results='markup'}
+# Plot the R2 for different number of PCs
+plot(pcr.fit, "validation", val.type = "R2")
+```
+
+
+## Conclusions
+
+```{r,results='markup'}
+cat("To build a prediction model for our dataset we did the following things: \n
+1. Perform exploratory data analysis (EDA) to check which variables affect our output variable which is the selling price of the car: Plot boxplots, line plots, histograms, Evaluate correlation matrix \n
+2. Feature selection \n
+3. Build a linear regression prediction model using the best features selected and test its R2 value. \n
+4. Build a PCR model by conducting PCA, to see if we can improve the R2 metric \n
+We concluded that the variables which affect the selling price the most are: 
+year, km_driven, seller_type, transmission, mileage, max_power. \n
+The maximum value of R2 that can be attained using linear models is around 0.68.\n
+")
+```
 
 
