@@ -235,4 +235,44 @@ cat("We can conclude that all except fuel type and owner are highly significant 
 ```
 
 ## SMART Question 2: Type of car that has been sold the most (in each category) and the preferred category in each variable
+```{r fig.height = 7, fig.width = 10, results = 'markup'}
+fuel_freq = as.data.frame(table(vehicle$fuel))
+p7 <- ggplot(vehicle, aes(x=fuel)) + geom_histogram(color="black", fill="green", binwidth = 1, stat = "count")+labs(title = "Number of cars sold for \neach Fuel type")+ theme(plot.title = element_text(size = 10, face = "bold"))
+sellerType_freq = as.data.frame(table(vehicle$seller_type))
+p8 <- ggplot(vehicle, aes(x=seller_type)) + geom_histogram(color="black", fill="green", binwidth = 1, stat = "count")+labs(title = "Number of cars sold for \neach seller type")+ theme(plot.title = element_text(size = 10, face = "bold"))
+transmission_freq = as.data.frame(table(vehicle$transmission))
+p9 <- ggplot(vehicle, aes(x=transmission)) + geom_histogram(color="black", fill="green", binwidth = 1, stat = "count")+labs(title = "Number of cars sold for \neach transmission type")+ theme(plot.title = element_text(size = 10, face = "bold"))
+year_freq = as.data.frame(table(vehicle$year))
+p10 <- ggplot(vehicle, aes(x=year)) + geom_histogram(color="black", fill="green", binwidth = 1, stat = "count")+labs(title = "Number of cars sold for \neach year 1994-2020")+ theme(plot.title = element_text(size = 10, face = "bold"))+ scale_x_continuous(breaks = seq(1994, 2020, 5))
+owner_freq = as.data.frame(table(vehicle$owner))
+p11 <- ggplot(vehicle, aes(x=owner)) + geom_histogram(color="black", fill="green", binwidth = 1, stat = "count")+labs(title = "Number of cars sold for \neach number of owners")+ theme(plot.title = element_text(size = 10, face = "bold"))
+seats_freq = as.data.frame(table(vehicle$seats))
+p12 <- ggplot(vehicle, aes(x=seats)) + geom_histogram(color="black", fill="green", binwidth = 1, stat = "count")+labs(title = "Number of cars sold for \neach number of seats")+ theme(plot.title = element_text(size = 10, face = "bold"))+ scale_x_continuous(breaks = seq(4, 14, 1))
+library("gridExtra")
+grid.arrange(p7, p8, p9, p10, p11, p12, ncol = 3, nrow = 2)
+```
+
+## SMART Question 3: Correlation between selling price and other variables
+```{r, results = 'markup'}
+cat("From the boxplots we generated for the categorical variables, we can see that there is minimal overlap between the plots of each category for the variables fuel and transmission. So, we can say that the selling price is highly correlated to the categories in these variables. But there is some significant overlap for categories 1 and 2 for the variable seller_type. Thus the selling price is correlated to the categories but not all, for the variable seller_type. \n\n")
+cat("To confirm the above conclusions, I ran one way Anova test for the categorical variables as follows: \n")
+#Fuel
+SP_fuel = aov(selling_price ~ fuel, data = vehicle)
+summary(SP_fuel)
+cat("As the p-value is less than the significance level 0.05, we can conclude that there are significant differences between the groups in fuel variable. \n \n")
+#Transmission
+SP_transmission = aov(selling_price ~ transmission, data = vehicle)
+summary(SP_transmission)
+cat("As the p-value is less than the significance level 0.05, we can conclude that there are significant differences between the groups in transmission variable. \n\n")
+#Seller Type
+SP_sellerType = aov(selling_price ~ seller_type, data = vehicle)
+summary(SP_sellerType)
+cat("As the p-value is less than the significance level 0.05, we can conclude that there are significant differences between the groups in seller_type variable. \n\n")
+cat("For the numerical variables, we can just plot the correlation matrix as follows: \n")
+library(ggcorrplot)
+df <- dplyr::select_if(vehicle, is.numeric)
+r <- cor(df, use="complete.obs")
+xkabledply(round(r,2))
+ggcorrplot(r, hc.order = TRUE, type = "lower", lab = TRUE)
+```
 
