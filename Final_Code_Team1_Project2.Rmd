@@ -293,5 +293,14 @@ cat("considering we have to maximize R2, minimize BIC and CP, and minimize the n
 best_model = lm(selling_price~ year+ km_driven+ seller_type+ transmission+ mileage+ max_power, data = vehicle)
 summary(best_model)
 ```
+### Part2: Forward
+```{r, results = 'markup'}
+reg.forward10 <- regsubsets(selling_price~. -name, data = vehicle, nvmax = 10, nbest = 1, method = "forward")
+plot(reg.forward10, scale = "adjr2", main = "Adjusted R^2")
+plot(reg.forward10, scale = "bic", main = "BIC")
+plot(reg.forward10, scale = "Cp", main = "Cp")
+
+cat("considering we have to minimize the number of features keeping R2 maximum and BIC and CP minimum, we see we have the same model as we obtained using exhaustive method. \n")
+```
 
 
