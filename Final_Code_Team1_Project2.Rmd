@@ -275,6 +275,8 @@ r <- cor(df, use="complete.obs")
 xkabledply(round(r,2))
 ggcorrplot(r, hc.order = TRUE, type = "lower", lab = TRUE)
 ```
+
+## SMART Question 4: Predicting the selling price based on the variables
 ## Feature selection comparing methods: exhaustive, forward
 
 ### Part1: Exhaustive
